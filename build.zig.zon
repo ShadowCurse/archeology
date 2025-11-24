@@ -1,0 +1,12 @@
+.{
+    .name = .archeology,
+    .version = "0.0.0",
+    .fingerprint = 0x9782c79a423b8e73,
+    .minimum_zig_version = "0.15.1",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
