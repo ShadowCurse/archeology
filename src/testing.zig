@@ -46,7 +46,6 @@ else
     @compileError("Only x86_64 is supported");
 
 pub const InputType = enum {
-    undefined,
     random,
     pattern_all_0,
     pattern_all_1,
@@ -59,7 +58,7 @@ pub const Description = struct {
     function: *const fn ([*]const u8, u64) callconv(.c) void,
     name: []const u8,
     input_size: u64 = 1 << 30,
-    input_type: InputType = .undefined,
+    input_type: InputType = .pattern_all_0,
     iterations: u32 = 10,
 };
 
@@ -128,7 +127,6 @@ fn create_input(size: u64, input_type: InputType) ![]align(4096) u8 {
         0,
     );
     switch (input_type) {
-        .undefined => {},
         .random => {
             const fd = try std.posix.open("/dev/urandom", .{ .ACCMODE = .RDONLY }, 0);
             defer std.posix.close(fd);
