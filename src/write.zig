@@ -12,5 +12,5 @@ pub fn main() !void {
         .{ .function = write_2, .name = "write_2" },
         .{ .function = write_3, .name = "write_3" },
         .{ .function = write_4, .name = "write_4" },
-    });
+    }, &.{});
 }

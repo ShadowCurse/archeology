@@ -12,5 +12,5 @@ pub fn main() !void {
         .{ .function = test_nop, .name = "test_nop" },
         .{ .function = test_cmp, .name = "test_cmp" },
         .{ .function = test_dec, .name = "test_dec" },
-    });
+    },&.{});
 }

@@ -14,5 +14,5 @@ pub fn main() !void {
         .{ .function = align_15, .name = "align_15" },
         .{ .function = align_31, .name = "align_31" },
         .{ .function = align_63, .name = "align_63" },
-    });
+    },&.{});
 }

@@ -35,5 +35,5 @@ pub fn main() !void {
             .name = "conditional_nop_pattern_every_4",
             .input_type = .pattern_every_4,
         },
-    });
+    },&.{});
 }

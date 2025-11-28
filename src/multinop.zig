@@ -14,5 +14,5 @@ pub fn main() !void {
         .{ .function = nop_1x4, .name = "nop_1x4" },
         .{ .function = nop_1x5, .name = "nop_1x5" },
         .{ .function = nop_1x9, .name = "nop_1x9" },
-    });
+    },&.{});
 }

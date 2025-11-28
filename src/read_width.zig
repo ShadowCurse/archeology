@@ -12,5 +12,5 @@ pub fn main() !void {
         .{ .function = read_8x2, .name = "read_8x2" },
         .{ .function = read_16x2, .name = "read_16x2" },
         .{ .function = read_32x2, .name = "read_32x2" },
-    });
+    },&.{});
 }

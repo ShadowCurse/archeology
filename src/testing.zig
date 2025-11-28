@@ -54,8 +54,9 @@ pub const InputType = enum {
     pattern_every_4,
 };
 
+const FN = fn ([*]const u8, u64, [*]const u8, u64) callconv(.c) void;
 pub const Description = struct {
-    function: *const fn ([*]const u8, u64) callconv(.c) void,
+    function: *const anyopaque,
     name: []const u8,
     input_size: u64 = 1 << 30,
     input_type: InputType = .pattern_all_0,
@@ -73,12 +74,14 @@ fn longest_test_name(comptime tests: []const Description) usize {
     return longest;
 }
 
-pub fn run(comptime tests: []const Description) !void {
+pub fn run(comptime tests: []const Description, additional_input: []const u8) !void {
     const freq = get_perf_counter_frequency();
 
     var results: [tests.len]Result = .{Result{}} ** tests.len;
 
     inline for (tests, &results) |t, *r| {
+        const function = @as(*const FN, @ptrCast(t.function));
+
         const input = try create_input(t.input_size, t.input_type);
         defer delete_input(input);
 
@@ -86,10 +89,20 @@ pub fn run(comptime tests: []const Description) !void {
             "Running test: {s} with input size: {d}, input type: {t}",
             .{ t.name, t.input_size, t.input_type },
         );
-        for (0..t.iterations) |i| {
-            std.log.info("Iteration: {d}", .{i});
+        for (0..t.iterations) |_| {
             const start = get_perf_counter();
-            t.function(input.ptr, t.input_size);
+
+            @call(
+                .never_inline,
+                function,
+                .{
+                    input.ptr,
+                    t.input_size,
+                    additional_input.ptr,
+                    additional_input.len,
+                },
+            );
+
             const end = get_perf_counter();
             const delta = end - start;
             r.max_time = @max(r.max_time, delta);

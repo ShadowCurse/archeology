@@ -8,5 +8,5 @@ pub fn main() !void {
     try testing.run(&[_]testing.Description{
         .{ .function = rat_add, .name = "rat_add" },
         .{ .function = rat_mov_add, .name = "rat_mov_add" },
-    });
+    },&.{});
 }
