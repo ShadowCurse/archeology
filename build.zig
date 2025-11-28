@@ -13,6 +13,7 @@ pub fn build(b: *std.Build) void {
     compile_and_link_asm(b, target, optimize, "read");
     compile_and_link_asm(b, target, optimize, "write");
     compile_and_link_asm(b, target, optimize, "read_width");
+    compile_and_link_asm(b, target, optimize, "cache_size");
 }
 
 fn compile_and_link_asm(
