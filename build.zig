@@ -12,6 +12,7 @@ pub fn build(b: *std.Build) void {
     compile_and_link_asm(b, target, optimize, "loop_rat");
     compile_and_link_asm(b, target, optimize, "loop_read");
     compile_and_link_asm(b, target, optimize, "loop_write");
+    compile_and_link_asm(b, target, optimize, "loop_read_width");
 }
 
 fn compile_and_link_asm(
