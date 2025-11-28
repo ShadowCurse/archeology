@@ -1,8 +1,8 @@
-global loop_align_64
-global loop_align_1
-global loop_align_15
-global loop_align_31
-global loop_align_63
+global nop_3x1
+global nop_1x3
+global nop_1x4
+global nop_1x5
+global nop_1x9
 
 section .text
 ; on Linux arguments are passed as
@@ -11,56 +11,63 @@ section .text
 ; 3: rdx
 ; 4: rcx
 
-loop_align_64:
+nop_3x1:
     xor rax, rax
-align 64
 .loop:
+    db 0x0f, 0x1f, 0x00
     inc rax
     cmp rax, rsi
     jb .loop
     ret
 
-loop_align_1:
+nop_1x3:
     xor rax, rax
-align 64
-nop
 .loop:
+    nop
+    nop
+    nop
     inc rax
     cmp rax, rsi
     jb .loop
     ret
 
-loop_align_15:
+nop_1x4:
     xor rax, rax
-align 64
-%rep 15
-nop
-%endrep
 .loop:
+    nop
+    nop
+    nop
+    nop
     inc rax
     cmp rax, rsi
     jb .loop
     ret
 
-loop_align_31:
+nop_1x5:
     xor rax, rax
-align 64
-%rep 31
-nop
-%endrep
 .loop:
+    nop
+    nop
+    nop
+    nop
+    nop
     inc rax
     cmp rax, rsi
     jb .loop
     ret
 
-loop_align_63:
+nop_1x9:
     xor rax, rax
-align 64
-%rep 63
-nop
-%endrep
 .loop:
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
     inc rax
     cmp rax, rsi
     jb .loop

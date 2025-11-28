@@ -1,4 +1,4 @@
-global loop_conditional_nop
+global conditional_nop
 
 section .text
 ; on Linux arguments are passed as
@@ -7,7 +7,7 @@ section .text
 ; 3: rdx
 ; 4: rcx
 
-loop_conditional_nop:
+conditional_nop:
     xor rax, rax
     ; the length of the buffer is given in bytes, divide by 8 to get length in u64s
     shr rsi, 3

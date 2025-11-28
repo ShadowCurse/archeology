@@ -1,7 +1,7 @@
-global loop_read_1
-global loop_read_2
-global loop_read_3
-global loop_read_4
+global read_1
+global read_2
+global read_3
+global read_4
 
 section .text
 ; on Linux arguments are passed as
@@ -10,7 +10,7 @@ section .text
 ; 3: rdx
 ; 4: rcx
 
-loop_read_1:
+read_1:
     align 64
 .loop:
     mov rax, [rdi]
@@ -18,7 +18,7 @@ loop_read_1:
     jnle .loop
     ret
 
-loop_read_2:
+read_2:
     align 64
 .loop:
     mov rax, [rdi]
@@ -27,7 +27,7 @@ loop_read_2:
     jnle .loop
     ret
 
-loop_read_3:
+read_3:
     align 64
 .loop:
     mov rax, [rdi]
@@ -37,7 +37,7 @@ loop_read_3:
     jnle .loop
     ret
 
-loop_read_4:
+read_4:
 	align 64
 .loop:
     mov rax, [rdi]

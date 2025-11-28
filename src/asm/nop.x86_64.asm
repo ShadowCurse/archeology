@@ -1,7 +1,7 @@
-global loop_mov
-global loop_nop
-global loop_cmp
-global loop_dec
+global test_mov
+global test_nop
+global test_cmp
+global test_dec
 
 section .text
 ; on Linux arguments are passed as
@@ -10,7 +10,7 @@ section .text
 ; 3: rdx
 ; 4: rcx
 
-loop_mov:
+test_mov:
     xor rax, rax
 .loop:
     mov [rdi + rax], al
@@ -19,7 +19,7 @@ loop_mov:
     jb .loop
     ret
 
-loop_nop:
+test_nop:
     xor rax, rax
 .loop:
     db 0x0f, 0x1f, 0x00
@@ -28,7 +28,7 @@ loop_nop:
     jb .loop
     ret
 
-loop_cmp:
+test_cmp:
     xor rax, rax
 .loop:
     inc rax
@@ -36,7 +36,7 @@ loop_cmp:
     jb .loop
     ret
 
-loop_dec:
+test_dec:
 .loop:
     dec rsi
     jnz .loop

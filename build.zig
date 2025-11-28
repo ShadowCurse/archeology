@@ -5,14 +5,14 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    compile_and_link_asm(b, target, optimize, "loop_nop");
-    compile_and_link_asm(b, target, optimize, "loop_multinop");
-    compile_and_link_asm(b, target, optimize, "loop_conditional_nop");
-    compile_and_link_asm(b, target, optimize, "loop_align");
-    compile_and_link_asm(b, target, optimize, "loop_rat");
-    compile_and_link_asm(b, target, optimize, "loop_read");
-    compile_and_link_asm(b, target, optimize, "loop_write");
-    compile_and_link_asm(b, target, optimize, "loop_read_width");
+    compile_and_link_asm(b, target, optimize, "nop");
+    compile_and_link_asm(b, target, optimize, "multinop");
+    compile_and_link_asm(b, target, optimize, "conditional_nop");
+    compile_and_link_asm(b, target, optimize, "align");
+    compile_and_link_asm(b, target, optimize, "rat");
+    compile_and_link_asm(b, target, optimize, "read");
+    compile_and_link_asm(b, target, optimize, "write");
+    compile_and_link_asm(b, target, optimize, "read_width");
 }
 
 fn compile_and_link_asm(

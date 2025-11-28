@@ -1,7 +1,7 @@
-global loop_read_4x2
-global loop_read_8x2
-global loop_read_16x2
-global loop_read_32x2
+global read_4x2
+global read_8x2
+global read_16x2
+global read_32x2
 
 section .text
 ; on Linux arguments are passed as
@@ -10,7 +10,7 @@ section .text
 ; 3: rdx
 ; 4: rcx
 
-loop_read_4x2:
+read_4x2:
     xor rax, rax
     align 64
 .loop:
@@ -21,7 +21,7 @@ loop_read_4x2:
     jb .loop
     ret
 
-loop_read_8x2:
+read_8x2:
     xor rax, rax
     align 64
 .loop:
@@ -32,7 +32,7 @@ loop_read_8x2:
     jb .loop
     ret
 
-loop_read_16x2:
+read_16x2:
     xor rax, rax
     align 64
 .loop:
@@ -43,7 +43,7 @@ loop_read_16x2:
     jb .loop
     ret
 
-loop_read_32x2:
+read_32x2:
     xor rax, rax
     align 64
 .loop:
