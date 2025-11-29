@@ -46,6 +46,7 @@ else
     @compileError("Only x86_64 is supported");
 
 pub const InputType = enum {
+    not_used,
     random,
     pattern_all_0,
     pattern_all_1,
@@ -140,6 +141,7 @@ fn create_input(size: u64, input_type: InputType) ![]align(4096) u8 {
         0,
     );
     switch (input_type) {
+        .not_used => {},
         .random => {
             const fd = try std.posix.open("/dev/urandom", .{ .ACCMODE = .RDONLY }, 0);
             defer std.posix.close(fd);

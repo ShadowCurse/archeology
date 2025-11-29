@@ -9,10 +9,10 @@ extern fn align_63(data: [*]const u8, len: u64) void;
 
 pub fn main() !void {
     try testing.run(&[_]testing.Description{
-        .{ .function = align_64, .name = "align_64" },
-        .{ .function = align_1, .name = "align_1" },
-        .{ .function = align_15, .name = "align_15" },
-        .{ .function = align_31, .name = "align_31" },
-        .{ .function = align_63, .name = "align_63" },
-    },&.{});
+        .{ .function = align_64, .name = "align_64", .input_type = .not_used },
+        .{ .function = align_1, .name = "align_1", .input_type = .not_used },
+        .{ .function = align_15, .name = "align_15", .input_type = .not_used },
+        .{ .function = align_31, .name = "align_31", .input_type = .not_used },
+        .{ .function = align_63, .name = "align_63", .input_type = .not_used },
+    }, &.{});
 }
