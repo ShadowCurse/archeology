@@ -15,6 +15,7 @@ pub fn build(b: *std.Build) void {
     compile_and_link_asm(b, target, optimize, "read_width");
     compile_and_link_asm(b, target, optimize, "cache_size");
     compile_and_link_asm(b, target, optimize, "cache_stride");
+    compile_and_link_asm(b, target, optimize, "streaming_write");
 }
 
 fn compile_and_link_asm(

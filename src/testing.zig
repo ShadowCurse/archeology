@@ -131,7 +131,7 @@ pub fn run(comptime tests: []const Description, additional_input: []const u8) !v
     }
 }
 
-fn create_input(size: u64, input_type: InputType) ![]align(4096) u8 {
+pub fn create_input(size: u64, input_type: InputType) ![]align(4096) u8 {
     const input = try std.posix.mmap(
         null,
         size,
