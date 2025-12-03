@@ -69,15 +69,22 @@ pub const Result = struct {
     min_time: u64 = std.math.maxInt(u64),
 };
 
+pub const AdditionalParametersDescription = struct {
+    name: []const u8 = &.{},
+    value: u64 = 0,
+};
+
 fn longest_test_name(comptime tests: []const Description) usize {
     var longest: usize = 0;
     for (tests) |t| longest = @max(longest, t.name.len);
     return longest;
 }
 
-pub fn run(comptime tests: []const Description, additional_input: []const u8) !void {
-    const freq = get_perf_counter_frequency();
-
+pub fn run(
+    comptime tests: []const Description,
+    additional_input: []const u8,
+    additional_parameters: []const AdditionalParametersDescription,
+) ![tests.len]Result {
     var results: [tests.len]Result = .{Result{}} ** tests.len;
 
     inline for (tests, &results) |t, *r| {
@@ -86,10 +93,13 @@ pub fn run(comptime tests: []const Description, additional_input: []const u8) !v
         const input = try create_input(t.input_size, t.input_type);
         defer delete_input(input);
 
-        std.log.info(
+        std.debug.print(
             "Running test: {s} with input size: {d}, input type: {t}",
             .{ t.name, t.input_size, t.input_type },
         );
+        for (additional_parameters) |ap| std.debug.print(" {s}: {d}", .{ ap.name, ap.value });
+        std.debug.print("\n", .{});
+
         for (0..t.iterations) |_| {
             const start = get_perf_counter();
 
@@ -110,6 +120,22 @@ pub fn run(comptime tests: []const Description, additional_input: []const u8) !v
             r.min_time = @min(r.min_time, delta);
         }
     }
+    return results;
+}
+
+pub fn print_header(
+    additional_parameters: []const AdditionalParametersDescription,
+) void {
+    std.debug.print("TestName MinCycles MinMs MaxGBs MaxCycles MaxMs MinGBs", .{});
+    for (additional_parameters) |ap| std.debug.print(" {s}", .{ap.name});
+    std.debug.print("\n", .{});
+}
+pub fn print_results(
+    comptime tests: []const Description,
+    results: []const Result,
+    additional_parameters: []const AdditionalParametersDescription,
+) void {
+    const freq = get_perf_counter_frequency();
 
     inline for (tests, results) |t, r| {
         const min_seconds: f64 =
@@ -122,12 +148,20 @@ pub fn run(comptime tests: []const Description, additional_input: []const u8) !v
         const max_ms: f64 = max_seconds * 1000;
         const max_gbs: f64 =
             @as(f64, @floatFromInt(t.input_size)) / (max_seconds * @as(f64, (1 << 30)));
-        std.log.info(
-            "Test: {s:<" ++
+        // std.log.info(
+        //     "Test: {s:<" ++
+        //         std.fmt.comptimePrint("{d}", .{longest_test_name(tests)}) ++
+        //         "} min: {d:>10} {d:>6.2}ms {d:>6.2}Gbs max: {d:>10} {d:>6.2}ms {d:>6.2}Gbs",
+        //     .{ t.name, r.min_time, min_ms, min_gbs, r.max_time, max_ms, max_gbs },
+        // );
+        std.debug.print(
+            "{s:<" ++
                 std.fmt.comptimePrint("{d}", .{longest_test_name(tests)}) ++
-                "} min: {d:>10} {d:>6.2}ms {d:>6.2}Gbs max: {d:>10} {d:>6.2}ms {d:>6.2}Gbs",
+                "} {d} {d:.2} {d:.2} {d} {d:.2} {d:.2}",
             .{ t.name, r.min_time, min_ms, min_gbs, r.max_time, max_ms, max_gbs },
         );
+        for (additional_parameters) |ap| std.debug.print(" {d}", .{ap.value});
+        std.debug.print("\n", .{});
     }
 }
 

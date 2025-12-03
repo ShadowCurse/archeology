@@ -2,10 +2,16 @@ const std = @import("std");
 const testing = @import("testing.zig");
 
 extern fn read_32x8(data: [*]const u8, len: u64) void;
+
+const TESTS = [_]testing.Description{
+    .{ .function = read_32x8, .name = "read_32x8" },
+};
+
 const SINGLE_READ_SIZE = 256;
+const RUNS = 64;
 
 pub fn main() !void {
-    var cache_sizes: [64]u64 = undefined;
+    var cache_sizes: [RUNS]u64 = undefined;
     var delta: u64 = 4096;
     var current_size: u64 = 4096;
     for (&cache_sizes) |*s| {
@@ -16,20 +22,20 @@ pub fn main() !void {
         if (16 << 20 < current_size) delta = 16 << 20;
         current_size += delta;
     }
-    for (cache_sizes) |cache_size| {
-        if (cache_size < 1 << 20)
-            std.log.info("testing cache size: {d}KB", .{cache_size >> 10})
-        else
-            std.log.info("testing cache size: {d}MB", .{cache_size >> 20});
+    var results: [RUNS][1]testing.Result = undefined;
+    for (cache_sizes, &results) |cache_size, *result| {
         const loop_counters: [2]u64 = .{
             (1 << 30) / cache_size,
             cache_size / SINGLE_READ_SIZE,
         };
-        try testing.run(&[_]testing.Description{
-            .{
-                .function = read_32x8,
-                .name = "read_32x8",
-            },
-        }, @ptrCast(&loop_counters));
+        result.* = try testing.run(
+            &TESTS,
+            @ptrCast(&loop_counters),
+            &.{.{ .name = "cache_size", .value = cache_size }},
+        );
     }
+
+    testing.print_header(&.{.{ .name = "CacheSize" }});
+    for (cache_sizes, &results) |cache_size, *result|
+        testing.print_results(&TESTS, result, &.{.{ .value = cache_size }});
 }
