@@ -88,7 +88,7 @@ pub fn run(
     var results: [tests.len]Result = .{Result{}} ** tests.len;
 
     inline for (tests, &results) |t, *r| {
-        const function = @as(*const FN, @ptrCast(t.function));
+        const function = @as(*const FN, @ptrCast(@alignCast(t.function)));
 
         const input = try create_input(t.input_size, t.input_type);
         defer delete_input(input);
