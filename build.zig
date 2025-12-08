@@ -15,7 +15,8 @@ pub fn build(b: *std.Build) void {
     compile_and_link_asm(b, target, optimize, "read_width");
     compile_and_link_asm(b, target, optimize, "cache_size");
     compile_and_link_asm(b, target, optimize, "cache_stride");
-    compile_and_link_asm(b, target, optimize, "streaming_write");
+    if (builtin.cpu.arch == .x86_64)
+        compile_and_link_asm(b, target, optimize, "streaming_write");
 }
 
 fn compile_and_link_asm(
@@ -46,14 +47,25 @@ fn compile_and_link_asm(
         .root_module = exe_mod,
     });
 
-    const command = b.addSystemCommand(&.{
-        "nasm",
-        "-f",
-        "elf64",
-        path_asm,
-    });
-    exe.step.dependOn(&command.step);
-    exe.root_module.addObjectFile(b.path(path_obj));
+    if (builtin.cpu.arch == .x86_64) {
+        const command = b.addSystemCommand(&.{
+            "nasm",
+            "-f",
+            "elf64",
+            path_asm,
+        });
+        exe.step.dependOn(&command.step);
+        exe.root_module.addObjectFile(b.path(path_obj));
+    } else {
+        const command = b.addSystemCommand(&.{
+            "as",
+            path_asm,
+            "-o",
+            path_obj,
+        });
+        exe.step.dependOn(&command.step);
+        exe.root_module.addObjectFile(b.path(path_obj));
+    }
 
     b.installArtifact(exe);
 
