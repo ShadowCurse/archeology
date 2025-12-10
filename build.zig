@@ -17,6 +17,33 @@ pub fn build(b: *std.Build) void {
     compile_and_link_asm(b, target, optimize, "cache_stride");
     if (builtin.cpu.arch == .x86_64)
         compile_and_link_asm(b, target, optimize, "streaming_write");
+
+    compile(b, target, optimize, "file_read");
+}
+
+fn compile(
+    b: *std.Build,
+    target: std.Build.ResolvedTarget,
+    optimize: std.builtin.OptimizeMode,
+    name: []const u8,
+) void {
+    const path_src = std.fmt.allocPrint(b.allocator, "src/{s}.zig", .{name}) catch unreachable;
+
+    const exe_mod = b.createModule(.{
+        .root_source_file = b.path(path_src),
+        .target = target,
+        .optimize = optimize,
+    });
+    const exe = b.addExecutable(.{
+        .name = name,
+        .root_module = exe_mod,
+    });
+
+    b.installArtifact(exe);
+    const run_step = b.step(name, "");
+    const run_cmd = b.addRunArtifact(exe);
+    run_step.dependOn(&run_cmd.step);
+    run_cmd.step.dependOn(b.getInstallStep());
 }
 
 fn compile_and_link_asm(
