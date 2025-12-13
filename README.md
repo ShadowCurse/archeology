@@ -1,1 +1,1 @@
-Assembly micro tests from https://computerenhance.com/ programming series
+Moved to https://codeberg.org/ShadowCurse/archeology
